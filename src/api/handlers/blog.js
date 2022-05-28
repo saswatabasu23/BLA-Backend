@@ -1,4 +1,4 @@
-const blog = require("../models/blog");
+const Blog = require("../models/blog");
 const cloudinary = require("cloudinary");
 require('dotenv').config();
 
@@ -23,7 +23,7 @@ async function createBlog(req, res, next) {
         const result = await cloudinary.v2.uploader.upload(image);
         const imageUrl = result.secure_url;
 
-        const newBlog = new blog({
+        const newBlog = new Blog({
             title,
             content,
             author,
@@ -44,7 +44,7 @@ async function createBlog(req, res, next) {
 
 async function getBlogs(req, res, next) {
     try {
-        const blogs = await blog.find();
+        const blogs = await Blog.find();
         res.status(200).send(blogs);
     } catch (err) {
         console.log(err);
@@ -56,8 +56,8 @@ async function getBlogs(req, res, next) {
 
 async function getBlog(req, res, next) {
     try {
-        const blog = await blog.findById(req.params.id);
-        res.status(200).send(blog);
+        const Blog = await Blog.findById(req.params.id);
+        res.status(200).send(Blog);
     } catch (err) {
         console.log(err);
         res.status(500).send({
@@ -88,7 +88,7 @@ async function updateBlog(req, res, next) {
         const result = await cloudinary.v2.uploader.upload(image);
         const imageUrl = result.secure_url;
 
-        const updatedBlog = await blog.findByIdAndUpdate(req.params.id, {
+        const updatedBlog = await Blog.findByIdAndUpdate(req.params.id, {
             title,
             content,
             author,
@@ -109,7 +109,7 @@ async function updateBlog(req, res, next) {
 
 async function deleteBlog(req, res, next) {
     try {
-        await blog.findByIdAndDelete(req.params.id);
+        await Blog.findByIdAndDelete(req.params.id);
         res.status(200).send({
             message: "Blog Deleted Successfully!",
         });
